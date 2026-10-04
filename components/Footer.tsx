@@ -1,107 +1,117 @@
-"use client";
+import { Snowflake } from "@phosphor-icons/react/ssr";
+import { categories, categoryLabels } from "@/lib/data";
+import {
+  siteConfig,
+  buildWhatsAppLink,
+  formatWhatsAppNumber,
+} from "@/lib/site";
 
-import { WhatsappLogo, MapPin, Phone, Envelope } from "@phosphor-icons/react";
-import { siteConfig, buildWhatsAppLink } from "@/lib/site";
-
-const navLinks = [
-  { label: "Beranda", href: "#beranda" },
-  { label: "Layanan", href: "#layanan" },
-  { label: "Produk", href: "#produk" },
-  { label: "Tentang", href: "#tentang" },
-  { label: "Klien", href: "#klien" },
-  { label: "Kontak", href: "#kontak" },
+const layananLinks = [
+  "Spare Part Compressor",
+  "Service Cold Storage",
+  "Service Chiller & Freezer",
+  "Preventive Maintenance",
+  "Instalasi Cold Storage",
+  "Instalasi ABF",
 ];
+
+const produkLinks = categories.slice(0, 6).map((c) => categoryLabels[c]);
+
+const contacts = [
+  { label: "WhatsApp", value: formatWhatsAppNumber(), href: buildWhatsAppLink() },
+  { label: "Email", value: siteConfig.email, href: `mailto:${siteConfig.email}` },
+  {
+    label: "Tokopedia",
+    value: siteConfig.tokopediaName,
+    href: siteConfig.tokopediaUrl,
+  },
+];
+
+function FooterColumn({
+  title,
+  href,
+  links,
+}: {
+  title: string;
+  href: string;
+  links: string[];
+}) {
+  return (
+    <nav>
+      <h2 className="text-[11px] font-bold tracking-[0.16em] text-brand-200 uppercase">
+        {title}
+      </h2>
+      <ul className="mt-3.5 space-y-2">
+        {links.map((label) => (
+          <li key={label}>
+            <a
+              href={href}
+              className="text-sm text-brand-100 transition-colors hover:text-sun-500"
+            >
+              {label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
 
 export default function Footer() {
   return (
-    <footer className="bg-slate-900 pt-16 pb-8 text-slate-300">
-      <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="sm:col-span-2 lg:col-span-1">
-            <div className="flex items-center gap-2.5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500 text-sm font-bold text-slate-950">
-                HB
+    <footer className="bg-brand-onyx py-10 text-white">
+      <div className="mx-auto max-w-7xl px-5 lg:px-8">
+        <div className="grid items-start gap-8 sm:grid-cols-2 lg:grid-cols-[1.9fr_1fr_1fr_1fr]">
+          <div>
+            <a
+              href="#beranda"
+              className="flex items-center gap-2.5 text-lg font-black tracking-tight"
+            >
+              <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-sun-500 text-brand-onyx">
+                <Snowflake size={18} weight="fill" />
               </span>
-              <span className="flex flex-col leading-none">
-                <span className="text-base font-bold tracking-tight text-white">
-                  Hoety Berkah
-                </span>
-                <span className="text-[11px] font-semibold tracking-[0.14em] text-slate-400 uppercase">
-                  Solusindo
-                </span>
+              <span className="text-white">
+                Hoety Berkah <span className="text-sun-500">Solusindo</span>
               </span>
-            </div>
-            <p className="mt-4 max-w-xs text-[14px] leading-relaxed text-slate-400">
-              {siteConfig.tagline}. Melayani kebutuhan refrigerasi industri di wilayah Jabodetabek.
+            </a>
+            <p className="mt-3.5 text-sm leading-relaxed text-brand-100">
+              Spare part dan service refrigerasi untuk industri, komersial, dan
+              distribusi di seluruh Jabodetabek.
             </p>
           </div>
 
+          <FooterColumn title="Layanan" href="#layanan" links={layananLinks} />
+          <FooterColumn title="Produk" href="#produk" links={produkLinks} />
+
           <div>
-            <h4 className="text-[12px] font-semibold tracking-[0.14em] text-slate-400 uppercase">
-              Navigasi
-            </h4>
-            <ul className="mt-4 space-y-2.5">
-              {navLinks.map((link) => (
-                <li key={link.href}>
+            <h2 className="text-[11px] font-bold tracking-[0.16em] text-brand-200 uppercase">
+              Hubungi Kami
+            </h2>
+            <ul className="mt-3.5 space-y-3">
+              {contacts.map(({ label, value, href }) => (
+                <li key={label}>
                   <a
-                    href={link.href}
-                    className="text-[14px] font-medium text-slate-400 transition-colors hover:text-white"
+                    href={href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="group block text-sm"
                   >
-                    {link.label}
+                    <span className="block font-semibold text-white transition-colors group-hover:text-sun-500">
+                      {label}
+                    </span>
+                    <span className="block break-words text-brand-100">{value}</span>
                   </a>
                 </li>
               ))}
             </ul>
           </div>
-
-          <div>
-            <h4 className="text-[12px] font-semibold tracking-[0.14em] text-slate-400 uppercase">
-              Area Layanan
-            </h4>
-            <ul className="mt-4 space-y-2">
-              {siteConfig.serviceArea.map((city) => (
-                <li key={city} className="flex items-center gap-2 text-[14px] font-medium text-slate-400">
-                  <MapPin size={14} weight="bold" className="text-amber-500" />
-                  {city}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-[12px] font-semibold tracking-[0.14em] text-slate-400 uppercase">
-              Hubungi Kami
-            </h4>
-            <ul className="mt-4 space-y-3">
-              <li>
-                <a
-                  href={buildWhatsAppLink()}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-2 text-[14px] font-medium text-slate-400 transition-colors hover:text-amber-400"
-                >
-                  <WhatsappLogo size={16} weight="fill" className="text-amber-500" />
-                  WhatsApp
-                </a>
-              </li>
-              <li className="flex items-center gap-2 text-[14px] text-slate-400">
-                <Phone size={14} weight="bold" className="text-amber-500" />
-                {siteConfig.phone}
-              </li>
-              <li className="flex items-center gap-2 text-[14px] text-slate-400">
-                <Envelope size={14} weight="bold" className="text-amber-500" />
-                <a href={`mailto:${siteConfig.email}`} className="transition-colors hover:text-white">
-                  {siteConfig.email}
-                </a>
-              </li>
-            </ul>
-          </div>
         </div>
 
-        <div className="mt-14 border-t border-slate-800 pt-6 text-center">
-          <p className="text-[13px] text-slate-500">
-            &copy; {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
-          </p>
+        <div className="mt-8 flex flex-wrap items-center justify-between gap-2 border-t border-brand-900 pt-5 text-xs text-brand-200">
+          <span>
+            &copy; {new Date().getFullYear()} {siteConfig.name}
+          </span>
+          <span>Spare part &amp; service refrigerasi Jabodetabek</span>
         </div>
       </div>
     </footer>

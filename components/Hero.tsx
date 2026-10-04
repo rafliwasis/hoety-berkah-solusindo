@@ -1,15 +1,21 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
-import { ArrowRight, PhoneIncoming } from "@phosphor-icons/react";
+import {
+  SealCheck,
+  CheckCircle,
+  ArrowRight,
+  WhatsappLogo,
+} from "@phosphor-icons/react";
 import { heroImages } from "@/lib/data";
 import { buildWhatsAppLink } from "@/lib/site";
 
 export default function Hero() {
   const [index, setIndex] = useState(0);
   const reduce = useReducedMotion();
+  const touchStart = useRef<number | null>(null);
 
   const next = useCallback(() => {
     setIndex((i) => (i + 1) % heroImages.length);
@@ -25,11 +31,26 @@ export default function Hero() {
     return () => clearInterval(t);
   }, [next, reduce]);
 
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStart.current = e.changedTouches[0].clientX;
+  };
+
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStart.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchStart.current;
+    touchStart.current = null;
+    if (Math.abs(dx) < 45) return;
+    if (dx < 0) next();
+    else prev();
+  };
+
   return (
     <section
       id="beranda"
-      className="relative flex min-h-[100dvh] items-center overflow-hidden bg-slate-950 pt-24"
+      className="relative flex min-h-[720px] items-center overflow-hidden bg-brand-hero text-white"
       aria-label="Hoety Berkah Solusindo"
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
     >
       <div className="absolute inset-0">
         <AnimatePresence initial={false}>
@@ -39,7 +60,7 @@ export default function Hero() {
             initial={reduce ? { opacity: 1 } : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={reduce ? undefined : { opacity: 0 }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 0.7 }}
           >
             <Image
               src={heroImages[index].src}
@@ -51,79 +72,73 @@ export default function Hero() {
             />
           </motion.div>
         </AnimatePresence>
-        <div className="hero-gradient absolute inset-0" />
+        <div className="absolute inset-0 bg-linear-to-r from-brand-hero via-brand-hero/75 to-brand-hero/15" />
+        <div className="absolute inset-0 bg-brand-hero/20" />
       </div>
 
-      <div className="relative mx-auto w-full max-w-3xl px-4 py-28 sm:px-6 lg:py-32">
+      <div className="relative mx-auto w-full max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
         <motion.div
           className="max-w-2xl"
-          initial={reduce ? { opacity: 1 } : { opacity: 0, y: 24 }}
+          initial={reduce ? { opacity: 1 } : { opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
         >
-          <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-[12px] font-medium tracking-wide text-amber-300 backdrop-blur">
-            Spare Part, Service & Instalasi Refrigerasi
+          <p className="mb-6 inline-flex items-center gap-2 rounded-full bg-brand-ink px-3 py-1.5 text-xs font-bold tracking-wide text-brand-100">
+            <SealCheck size={16} weight="fill" className="text-sun-500" />
+            Solusi pendingin untuk bisnis modern
           </p>
-          <h1 className="text-balance text-[34px] leading-[1.1] font-bold tracking-tight text-white sm:text-[40px] lg:text-[44px]">
-            Jasa Service Cold Storage, Chiller &amp; Compressor di Jabodetabek
+          <h1 className="text-balance text-4xl leading-[1.02] font-black tracking-[-0.04em] text-white md:text-6xl">
+            Solusi Dingin untuk{" "}
+            <span className="text-sun-500">Bisnis yang Tumbuh</span>
           </h1>
-          <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-200 sm:text-lg">
-            Spare part dan accessories compressor, service cold storage, chiller, freezer,
-            preventive maintenance, instalasi cold storage dan ABF.
+          <p className="mt-6 max-w-xl text-lg leading-8 text-brand-100">
+            Jasa service cold storage, chiller, compressor, penjualan spare part,
+            hingga instalasi sistem pendingin untuk kebutuhan industri dan komersial.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
             <a
               href={buildWhatsAppLink()}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-500 px-7 py-3.5 text-sm font-semibold text-slate-950 transition-all hover:bg-amber-400 active:scale-[0.98]"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-sun-500 px-5 py-3.5 text-sm font-bold text-brand-onyx transition-colors hover:bg-sun-300 active:scale-[0.98]"
             >
-              <PhoneIncoming size={18} weight="fill" />
+              <WhatsappLogo size={18} weight="fill" />
               Hubungi Kami
             </a>
             <a
               href="#layanan"
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/30 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/15 active:scale-[0.98]"
+              className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/40 px-5 py-3.5 text-sm font-bold text-white transition-colors hover:bg-white/10 active:scale-[0.98]"
             >
               Lihat Layanan
               <ArrowRight size={18} />
             </a>
           </div>
+          <div className="mt-10 flex flex-wrap gap-x-7 gap-y-3 text-sm font-semibold text-brand-100">
+            <span className="flex items-center gap-2">
+              <CheckCircle size={16} weight="fill" className="text-sun-500" />
+              Teknisi berpengalaman
+            </span>
+            <span className="flex items-center gap-2">
+              <CheckCircle size={16} weight="fill" className="text-sun-500" />
+              Respon cepat
+            </span>
+          </div>
         </motion.div>
       </div>
 
-      <div className="absolute right-4 bottom-6 left-4 z-10 flex items-center justify-between sm:right-6 sm:left-6">
-        <div className="flex gap-2">
-          {heroImages.map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => setIndex(i)}
-              className={`h-1.5 rounded-full transition-all ${
-                i === index ? "w-8 bg-amber-400" : "w-3 bg-white/40 hover:bg-white/70"
-              }`}
-              aria-label={`Slide ${i + 1}`}
-            />
-          ))}
-        </div>
-        <div className="flex gap-2">
+      <div className="absolute right-5 bottom-6 z-10 flex items-center gap-2 lg:right-8">
+        {heroImages.map((_, i) => (
           <button
+            key={i}
             type="button"
-            onClick={prev}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/25 bg-white/5 text-white backdrop-blur transition-colors hover:bg-white/15"
-            aria-label="Slide sebelumnya"
-          >
-            <ArrowRight size={16} className="rotate-180" />
-          </button>
-          <button
-            type="button"
-            onClick={next}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/25 bg-white/5 text-white backdrop-blur transition-colors hover:bg-white/15"
-            aria-label="Slide berikutnya"
-          >
-            <ArrowRight size={16} />
-          </button>
-        </div>
+            onClick={() => setIndex(i)}
+            aria-label={`Slide ${i + 1}`}
+            aria-current={i === index}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              i === index ? "w-7 bg-sun-500" : "w-3 bg-white/45 hover:bg-white/80"
+            }`}
+          />
+        ))}
       </div>
     </section>
   );

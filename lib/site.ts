@@ -1,25 +1,26 @@
 export const siteConfig = {
   name: "Hoety Berkah Solusindo",
-  shortName: "Hoety",
-  tagline: "Spare Part & Service Refrigerasi",
 
-  // TODO: Ganti dengan data asli dari pihak Hoety Berkah Solusindo.
-  whatsappNumber: "6281234567890",
+  whatsappNumber: "6287706091992",
   whatsappMessageDefault:
     "Halo Hoety Berkah Solusindo, saya ingin mendapatkan informasi lebih lanjut.",
-  phone: "021-0000-0000",
-  email: "halo@hoetyberkah.com",
-  address: "Jl. Industri Raya No. 00, Bekasi, Jawa Barat",
-  hours: "Senin - Sabtu, 08.00 - 17.00 WIB",
+  email: "hoetyberkahsolusindo@gmail.com",
+  address:
+    "Villa Mas Garden, Blok F No.91 RT 07 RW 09, Perwira, Bekasi Utara, Kota Bekasi 17122",
+  hours: "Senin - Sabtu, 08.00 - 21.00",
 
-  // TODO: Tahun berdiri perusahaan (perlu konfirmasi dari pihak Hoety).
-  establishedYear: "20xx",
+  tokopediaName: "Hoety Berkah Solusindo",
+  tokopediaUrl: "https://www.tokopedia.com/hoetyberkahsolusindo",
 
   serviceArea: ["Jakarta", "Bekasi", "Tangerang", "Depok", "Bogor"],
 } as const;
 
 export const mapEmbedUrl =
-  "https://www.google.com/maps?q=Bekasi%2C%20Jawa%20Barat&z=11&output=embed";
+  "https://www.google.com/maps?q=Villa%20Mas%20Garden%2C%20Blok%20F%20No.91%20RT%2007%20RW%2009%2C%20Perwira%2C%20Bekasi%20Utara%2C%20Kota%20Bekasi%2017122&z=16&output=embed";
+
+export function formatWhatsAppNumber(raw: string = siteConfig.whatsappNumber) {
+  return `+${raw.slice(0, 2)} ${raw.slice(2, 5)}-${raw.slice(5, 9)}-${raw.slice(9)}`;
+}
 
 export function buildWhatsAppLink(
   message: string = siteConfig.whatsappMessageDefault,
@@ -29,9 +30,9 @@ export function buildWhatsAppLink(
 }
 
 export function buildProductMessage(productName: string): string {
-  return `Halo Hoety Berkah Solusindo, saya tertarik dengan produk ${productName}.`;
+  return `Halo Hoety Berkah Solusindo, saya ingin berkonsultasi soal produk ${productName}.`;
 }
 
 export function buildServiceMessage(serviceName: string): string {
-  return `Halo Hoety Berkah Solusindo, saya tertarik dengan layanan ${serviceName}.`;
+  return `Halo Hoety Berkah Solusindo, saya ingin berkonsultasi tentang layanan ${serviceName}.`;
 }
