@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { useScroll, useMotionValueEvent } from "motion/react";
-import { WhatsappLogo, List, X } from "@phosphor-icons/react";
-import { siteConfig, buildWhatsAppLink } from "@/lib/site";
+import { Snowflake, WhatsappLogo, List, X } from "@phosphor-icons/react";
+import { buildWhatsAppLink } from "@/lib/site";
 
 const navLinks = [
   { label: "Beranda", href: "#beranda" },
@@ -17,7 +18,11 @@ const navLinks = [
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
   const { scrollY } = useScroll();
+
+  const onHome = pathname === "/";
+  const resolve = (href: string) => (onHome ? href : `/${href}`);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setScrolled(latest > 8);
@@ -32,24 +37,23 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+      className={`sticky top-0 z-50 border-b border-slate-200 transition-all duration-300 ${
         scrolled
-          ? "bg-white/90 shadow-[0_1px_0_rgba(15,23,42,0.06)] backdrop-blur dark:bg-slate-950/90"
-          : "bg-white dark:bg-slate-950"
+          ? "bg-white/90 shadow-[0_1px_0_rgba(36,16,63,0.06)] backdrop-blur"
+          : "bg-white"
       }`}
     >
-      <nav className="mx-auto flex h-16 max-w-[1200px] items-center justify-between px-4 sm:px-6 lg:h-[72px]">
-        <a href="#beranda" className="flex items-center gap-2.5" aria-label="Hoety Berkah Solusindo - Beranda">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-900 text-sm font-bold text-amber-400 dark:bg-slate-800">
-            HB
+      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 lg:h-[72px] lg:px-8">
+        <a
+          href={resolve("#beranda")}
+          className="flex items-center gap-2.5 text-lg font-extrabold tracking-tight text-brand-ink"
+          aria-label="Hoety Berkah Solusindo - Beranda"
+        >
+          <span className="grid size-9 place-items-center rounded-lg bg-sun-500 text-brand-ink">
+            <Snowflake size={20} weight="fill" />
           </span>
-          <span className="flex flex-col leading-none">
-            <span className="text-base font-bold tracking-tight text-slate-900 dark:text-white">
-              Hoety Berkah
-            </span>
-            <span className="text-[11px] font-semibold tracking-[0.14em] text-slate-500 uppercase dark:text-slate-400">
-              Solusindo
-            </span>
+          <span className="text-base leading-none">
+            Hoety Berkah <span className="text-brand-700">Solusindo</span>
           </span>
         </a>
 
@@ -57,8 +61,8 @@ export default function Navbar() {
           {navLinks.map((link) => (
             <li key={link.href}>
               <a
-                href={link.href}
-                className="text-sm font-medium text-slate-600 transition-colors hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+                href={resolve(link.href)}
+                className="text-sm font-semibold text-brand-700 transition-colors hover:text-brand-900"
               >
                 {link.label}
               </a>
@@ -71,7 +75,7 @@ export default function Navbar() {
             href={buildWhatsAppLink()}
             target="_blank"
             rel="noreferrer"
-            className="hidden items-center gap-2 rounded-full bg-amber-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition-shadow hover:shadow-[0_8px_20px_-8px_rgba(245,158,11,0.6)] active:scale-[0.98] sm:inline-flex"
+            className="hidden items-center gap-2 rounded-full bg-sun-500 px-5 py-2.5 text-sm font-semibold text-brand-onyx transition-shadow hover:bg-sun-300 active:scale-[0.98] sm:inline-flex"
           >
             <WhatsappLogo size={18} weight="fill" />
             Hubungi Kami
@@ -79,7 +83,7 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-slate-700 transition-colors hover:bg-slate-100 lg:hidden dark:text-slate-200 dark:hover:bg-slate-800"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-brand-ink transition-colors hover:bg-slate-50 lg:hidden"
             aria-expanded={open}
             aria-label={open ? "Tutup menu" : "Buka menu"}
           >
@@ -89,14 +93,14 @@ export default function Navbar() {
       </nav>
 
       {open && (
-        <div className="border-t border-slate-100 bg-white lg:hidden dark:border-slate-800 dark:bg-slate-950">
-          <ul className="mx-auto flex max-w-[1200px] flex-col gap-1 px-4 py-4 sm:px-6">
+        <div className="border-t border-slate-200 bg-white lg:hidden">
+          <ul className="mx-auto flex max-w-7xl flex-col gap-1 px-5 py-4">
             {navLinks.map((link) => (
               <li key={link.href}>
                 <a
-                  href={link.href}
+                  href={resolve(link.href)}
                   onClick={() => setOpen(false)}
-                  className="block rounded-lg px-3 py-3 text-[15px] font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
+                  className="block rounded-lg px-3 py-3 text-[15px] font-medium text-slate-700 transition-colors hover:bg-brand-50 hover:text-brand-700"
                 >
                   {link.label}
                 </a>
@@ -107,7 +111,7 @@ export default function Navbar() {
                 href={buildWhatsAppLink()}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-amber-500 px-5 py-3 text-sm font-semibold text-slate-950"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-sun-500 px-5 py-3 text-sm font-semibold text-brand-onyx"
               >
                 <WhatsappLogo size={18} weight="fill" />
                 Hubungi Kami

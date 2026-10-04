@@ -1,45 +1,46 @@
-"use client";
-
-import { Snowflake, Wind } from "@phosphor-icons/react";
+import { Snowflake, Wind } from "@phosphor-icons/react/ssr";
 import Reveal from "@/components/Reveal";
+import SectionHeading from "@/components/SectionHeading";
 
 export default function InfoSection() {
   return (
-    <section className="bg-white py-24 dark:bg-slate-950">
-      <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
+    <section id="tentang" className="scroll-mt-20 bg-white py-20">
+      <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <Reveal>
-          <h2 className="text-center text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
-            Tentang Cold Storage &amp; ABF
-          </h2>
+          <SectionHeading
+            eyebrow="Dasar-dasar"
+            title="Dua hal yang paling sering ditanyakan"
+            description="Sebelum bicara soal harga, biasanya pelanggan kami mulai dari dua pertanyaan ini."
+          />
         </Reveal>
-        <div className="mt-14 grid gap-6 sm:grid-cols-2">
+        <div className="mt-10 grid gap-5 md:grid-cols-2">
           <Reveal delay={0.1}>
-            <article className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-8 transition-shadow hover:shadow-[0_24px_60px_-16px_rgba(15,23,42,0.12)] dark:border-slate-800 dark:bg-slate-900 dark:hover:shadow-[0_24px_60px_-16px_rgba(0,0,0,0.5)]">
-              <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-amber-500 text-slate-950 transition-colors group-hover:bg-amber-400">
+            <article className="h-full rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
+              <div className="mb-6 grid size-12 place-items-center rounded-xl bg-brand-100 text-brand-700">
                 <Snowflake size={26} weight="duotone" />
               </div>
-              <h3 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-                Apa itu Cold Storage?
+              <h3 className="text-xl font-bold text-slate-900">
+                Apa itu cold storage?
               </h3>
-              <p className="mt-3 text-[15px] leading-relaxed text-slate-600 dark:text-slate-300">
-                Cold storage adalah ruangan dengan sistem pendingin khusus yang digunakan untuk menyimpan
-                produk pada suhu tertentu sesuai kebutuhan. Cocok untuk penyimpanan makanan beku,
-                daging, sayuran, produk dairy, farmasi, hingga bahan baku industri.
+              <p className="mt-3 leading-7 text-slate-600">
+                Ruangan bersuhu rendah untuk menyimpan produk agar tetap segar dan
+                aman. Biasa dipakai untuk makanan beku, daging, sayuran, produk
+                dairy, farmasi, sampai bahan baku industri.
               </p>
             </article>
           </Reveal>
           <Reveal delay={0.2}>
-            <article className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-8 transition-shadow hover:shadow-[0_24px_60px_-16px_rgba(15,23,42,0.12)] dark:border-slate-800 dark:bg-slate-900 dark:hover:shadow-[0_24px_60px_-16px_rgba(0,0,0,0.5)]">
-              <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-amber-500 text-slate-950 transition-colors group-hover:bg-amber-400">
+            <article className="h-full rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
+              <div className="mb-6 grid size-12 place-items-center rounded-xl bg-brand-100 text-brand-700">
                 <Wind size={26} weight="duotone" />
               </div>
-              <h3 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+              <h3 className="text-xl font-bold text-slate-900">
                 Apa itu ABF (Air Blast Freezer)?
               </h3>
-              <p className="mt-3 text-[15px] leading-relaxed text-slate-600 dark:text-slate-300">
-                Air Blast Freezer adalah sistem pembekuan cepat menggunakan aliran udara bersuhu rendah.
-                Proses ini menjaga kualitas tekstur dan rasa produk makanan saat pembekuan, sehingga
-                sangat dibutuhkan di industri pengolahan makanan beku.
+              <p className="mt-3 leading-7 text-slate-600">
+                Sistem pembekuan cepat dengan udara dingin berkecepatan tinggi.
+                Produk membeku lebih singkat dan merata, sehingga tekstur dan
+                rasanya tidak rusak.
               </p>
             </article>
           </Reveal>
