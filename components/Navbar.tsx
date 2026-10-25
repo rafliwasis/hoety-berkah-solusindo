@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useScroll, useMotionValueEvent } from "motion/react";
-import { Snowflake, WhatsappLogo, List, X } from "@phosphor-icons/react";
+import { WhatsappLogo, List, X } from "@phosphor-icons/react";
 import { buildWhatsAppLink } from "@/lib/site";
 
 const navLinks = [
@@ -17,16 +17,10 @@ const navLinks = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
-  const { scrollY } = useScroll();
 
   const onHome = pathname === "/";
   const resolve = (href: string) => (onHome ? href : `/${href}`);
-
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    setScrolled(latest > 8);
-  });
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -36,22 +30,21 @@ export default function Navbar() {
   }, [open]);
 
   return (
-    <header
-      className={`sticky top-0 z-50 border-b border-slate-200 transition-all duration-300 ${
-        scrolled
-          ? "bg-white/90 shadow-[0_1px_0_rgba(36,16,63,0.06)] backdrop-blur"
-          : "bg-white"
-      }`}
-    >
+    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 lg:h-[72px] lg:px-8">
         <a
           href={resolve("#beranda")}
           className="flex items-center gap-2.5 text-lg font-extrabold tracking-tight text-brand-ink"
           aria-label="Hoety Berkah Solusindo - Beranda"
         >
-          <span className="grid size-9 place-items-center rounded-lg bg-sun-500 text-brand-ink">
-            <Snowflake size={20} weight="fill" />
-          </span>
+          <Image
+            src="/hoety-logo.png"
+            alt=""
+            width={36}
+            height={36}
+            priority
+            className="size-9 shrink-0 object-contain"
+          />
           <span className="text-base leading-none">
             Hoety Berkah <span className="text-brand-700">Solusindo</span>
           </span>

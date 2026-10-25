@@ -7,12 +7,12 @@ import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { WhatsappLogo, CaretDown, CaretUp } from "@phosphor-icons/react";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
-import { products, categories, categoryLabels } from "@/lib/data";
+import type { Product } from "@/lib/data";
+import { useCategories, useProducts } from "@/lib/store";
+import { isCloudinaryUrl, optimizedImageUrl } from "@/lib/cloudinary";
 import { buildWhatsAppLink, buildProductMessage } from "@/lib/site";
 
 const VISIBLE_COUNT = 6;
-
-const filterCategories = categories.map((c) => categoryLabels[c]);
 
 function formatPrice(n: number) {
   return new Intl.NumberFormat("id-ID", {
@@ -22,29 +22,31 @@ function formatPrice(n: number) {
   }).format(n);
 }
 
-function ProductCard({ product }: { product: (typeof products)[number] }) {
+function ProductCard({
+  product,
+  categoryName,
+}: {
+  product: Product;
+  categoryName: string;
+}) {
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
       <div className="relative h-56 w-full overflow-hidden bg-white">
         <div className="absolute inset-0 p-3 transition-transform duration-500 group-hover:scale-105">
           <Image
-            src={product.images[0]}
+            src={optimizedImageUrl(product.images[0], 700)}
             alt={product.name}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-contain"
             loading="lazy"
+            unoptimized={isCloudinaryUrl(product.images[0])}
           />
         </div>
-        {product.discountPrice != null && (
-          <span className="absolute top-3 left-3 rounded-md bg-sun-500 px-2.5 py-1 text-[11px] font-black text-brand-onyx">
-            PROMO
-          </span>
-        )}
       </div>
       <div className="flex flex-1 flex-col p-4">
         <p className="text-[11px] font-bold tracking-wider text-brand-600 uppercase">
-          {categoryLabels[product.category]}
+          {categoryName}
         </p>
         <h3 className="mt-1.5 min-h-10 text-sm leading-snug font-bold text-slate-900">
           {product.name}
@@ -89,16 +91,21 @@ function ProductCard({ product }: { product: (typeof products)[number] }) {
 }
 
 export default function Products() {
-  const [active, setActive] = useState<string>("Semua");
+  const { products } = useProducts();
+  const { categories } = useCategories();
+  const [active, setActive] = useState<string>("all");
   const [expanded, setExpanded] = useState(false);
   const reduce = useReducedMotion();
   const gridRef = useRef<HTMLDivElement>(null);
   const pendingScrollToGrid = useRef(false);
 
+  const categoryName = (id: string) =>
+    categories.find((category) => category.id === id)?.name ?? "Lainnya";
+
   const filtered =
-    active === "Semua"
+    active === "all"
       ? products
-      : products.filter((p) => categoryLabels[p.category] === active);
+      : products.filter((p) => p.category === active);
   const visible = expanded ? filtered : filtered.slice(0, VISIBLE_COUNT);
 
   const handleToggle = () => {
@@ -135,21 +142,21 @@ export default function Products() {
 
         <Reveal delay={0.1}>
           <div className="mt-7 flex gap-2 overflow-x-auto pb-2 scrollbar-none">
-            {["Semua", ...filterCategories].map((cat) => (
+            {[{ id: "all", name: "Semua" }, ...categories].map((cat) => (
               <button
-                key={cat}
+                key={cat.id}
                 type="button"
                 onClick={() => {
-                  setActive(cat);
+                  setActive(cat.id);
                   setExpanded(false);
                 }}
                 className={`shrink-0 rounded-full border px-3.5 py-1.5 text-[13px] font-semibold whitespace-nowrap transition-colors ${
-                  active === cat
+                  active === cat.id
                     ? "border-brand-ink bg-brand-ink text-white"
                     : "border-slate-200 bg-white text-slate-600 hover:border-brand-300 hover:text-brand-700"
                 }`}
               >
-                {cat}
+                {cat.name}
               </button>
             ))}
           </div>
@@ -184,7 +191,10 @@ export default function Products() {
                     exit={reduce ? undefined : { opacity: 0, y: -6 }}
                     transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    <ProductCard product={product} />
+                    <ProductCard
+                      product={product}
+                      categoryName={categoryName(product.category)}
+                    />
                   </motion.div>
                 ))}
               </AnimatePresence>

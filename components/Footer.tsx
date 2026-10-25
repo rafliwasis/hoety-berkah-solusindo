@@ -1,5 +1,7 @@
-import { Snowflake } from "@phosphor-icons/react/ssr";
-import { categories, categoryLabels } from "@/lib/data";
+"use client";
+
+import Image from "next/image";
+import { useCategories } from "@/lib/store";
 import {
   siteConfig,
   buildWhatsAppLink,
@@ -15,7 +17,8 @@ const layananLinks = [
   "Instalasi ABF",
 ];
 
-const produkLinks = categories.slice(0, 6).map((c) => categoryLabels[c]);
+const produkLinks = (categories: { name: string }[]) =>
+  categories.slice(0, 6).map((category) => category.name);
 
 const contacts = [
   { label: "WhatsApp", value: formatWhatsAppNumber(), href: buildWhatsAppLink() },
@@ -58,6 +61,8 @@ function FooterColumn({
 }
 
 export default function Footer() {
+  const { categories } = useCategories();
+
   return (
     <footer className="bg-brand-onyx py-10 text-white">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
@@ -67,8 +72,14 @@ export default function Footer() {
               href="#beranda"
               className="flex items-center gap-2.5 text-lg font-black tracking-tight"
             >
-              <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-sun-500 text-brand-onyx">
-                <Snowflake size={18} weight="fill" />
+              <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-white">
+                <Image
+                  src="/hoety-logo.png"
+                  alt=""
+                  width={36}
+                  height={36}
+                  className="size-8 object-contain"
+                />
               </span>
               <span className="text-white">
                 Hoety Berkah <span className="text-sun-500">Solusindo</span>
@@ -81,7 +92,11 @@ export default function Footer() {
           </div>
 
           <FooterColumn title="Layanan" href="#layanan" links={layananLinks} />
-          <FooterColumn title="Produk" href="#produk" links={produkLinks} />
+          <FooterColumn
+            title="Produk"
+            href="#produk"
+            links={produkLinks(categories)}
+          />
 
           <div>
             <h2 className="text-[11px] font-bold tracking-[0.16em] text-brand-200 uppercase">
