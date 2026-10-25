@@ -1,8 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import SiteChrome from "@/components/SiteChrome";
 import { siteConfig } from "@/lib/site";
 
 const inter = Inter({
@@ -20,6 +19,10 @@ export const metadata: Metadata = {
   },
   description:
     "Hoety Berkah Solusindo menyediakan spare part compressor, jasa service cold storage, chiller, freezer, preventive maintenance, instalasi cold storage dan ABF di Jakarta, Bekasi, Tangerang, Depok, Bogor.",
+  icons: {
+    icon: "/icon.png",
+    apple: "/apple-icon.png",
+  },
   keywords: [
     "jasa service cold storage",
     "service cold storage Jabodetabek",
@@ -52,9 +55,7 @@ export default function RootLayout({
   return (
     <html lang="id" className={inter.variable}>
       <body className="font-sans antialiased">
-        <Navbar />
-        {children}
-        <Footer />
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );

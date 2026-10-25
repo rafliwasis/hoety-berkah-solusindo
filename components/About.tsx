@@ -10,14 +10,12 @@ export default function About() {
         <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-16">
           <Reveal>
             <SectionHeading
-              eyebrow="Profil perusahaan"
-              title="Bekerja dengan sistem pendingin sejak 2014"
-              description="Mulai dari penyediaan spare part compressor, service cold storage dan chiller, preventive maintenance, sampai instalasi unit baru."
+              eyebrow="Tentang kami"
+              title="Partner cold storage dan refrigerasi sejak 2019"
+              description="PT Hoety Berkah Solusindo melayani penjualan, instalasi, service, dan maintenance cold storage serta sistem refrigerasi untuk kebutuhan industri dan usaha."
             />
             <p className="mt-4 max-w-2xl text-base leading-8 text-slate-600">
-              Sebagian besar klien kami bergerak di industri makanan, minuman, retail,
-              dan distribusi. Kami dipanggil untuk perbaikan mendadak, perawatan
-              berkala, maupun bangun ruang pendingin dari nol.
+              Sejak 2019, teknisi berpengalaman kami mendampingi mulai dari perencanaan, pemasangan, hingga perawatan berkala—agar produk tetap berkualitas dan operasional bisnis berjalan lancar.
             </p>
           </Reveal>
           <Reveal delay={0.15}>

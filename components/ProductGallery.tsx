@@ -3,17 +3,16 @@
 import { useState } from "react";
 import Image from "next/image";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
+import { isCloudinaryUrl, optimizedImageUrl } from "@/lib/cloudinary";
 
 interface ProductGalleryProps {
   images: string[];
   alt: string;
-  badge?: string | null;
 }
 
 export default function ProductGallery({
   images,
   alt,
-  badge = null,
 }: ProductGalleryProps) {
   const [index, setIndex] = useState(0);
 
@@ -26,19 +25,14 @@ export default function ProductGallery({
       <div className="group relative aspect-[4/3] w-full overflow-hidden bg-white sm:aspect-[5/4] lg:aspect-[4/3]">
         <Image
           key={images[index]}
-          src={images[index]}
+          src={optimizedImageUrl(images[index], 1200)}
           alt={alt}
           fill
           priority
           sizes="(max-width: 1024px) 100vw, 55vw"
           className="object-contain p-3"
+          unoptimized={isCloudinaryUrl(images[index])}
         />
-
-        {badge && (
-          <span className="absolute top-4 left-4 rounded-md bg-sun-500 px-2.5 py-1 text-xs font-black text-brand-onyx">
-            {badge}
-          </span>
-        )}
 
         {images.length > 1 && (
           <>
@@ -81,11 +75,12 @@ export default function ProductGallery({
               }`}
             >
               <Image
-                src={src}
+                src={optimizedImageUrl(src, 200)}
                 alt=""
                 fill
                 sizes="96px"
                 className="object-contain p-0.5"
+                unoptimized={isCloudinaryUrl(src)}
               />
             </button>
           ))}
